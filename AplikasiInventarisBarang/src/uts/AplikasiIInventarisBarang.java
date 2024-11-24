@@ -1,8 +1,21 @@
 package uts;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.sql.*;
 import javax.swing.table.*;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 /*
@@ -54,14 +67,17 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         UbahButton = new javax.swing.JButton();
         HapusButton = new javax.swing.JButton();
         ClearButton = new javax.swing.JButton();
-        ImportButton = new javax.swing.JButton();
-        KeluarButton = new javax.swing.JButton();
-        ExportButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         CariTextField = new javax.swing.JTextField();
         CariButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        TxtImportButton = new javax.swing.JButton();
+        TxtExportButton = new javax.swing.JButton();
+        KeluarButton = new javax.swing.JButton();
+        ImportExcelButton = new javax.swing.JButton();
+        EksportExcelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -100,6 +116,7 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         SimpanButton.setText("Simpan");
+        SimpanButton.setPreferredSize(new java.awt.Dimension(111, 27));
         SimpanButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SimpanButtonActionPerformed(evt);
@@ -107,11 +124,13 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(SimpanButton, gridBagConstraints);
 
         UbahButton.setText("Ubah");
+        UbahButton.setPreferredSize(new java.awt.Dimension(111, 27));
         UbahButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UbahButtonActionPerformed(evt);
@@ -119,8 +138,9 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(UbahButton, gridBagConstraints);
 
         HapusButton.setText("Hapus");
@@ -131,8 +151,9 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(HapusButton, gridBagConstraints);
 
         ClearButton.setText("Clear");
@@ -143,34 +164,10 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(ClearButton, gridBagConstraints);
-
-        ImportButton.setText("Import");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 15;
-        jPanel3.add(ImportButton, gridBagConstraints);
-
-        KeluarButton.setText("Keluar");
-        KeluarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                KeluarButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel3.add(KeluarButton, gridBagConstraints);
-
-        ExportButton.setText("Export");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 15;
-        jPanel3.add(ExportButton, gridBagConstraints);
 
         jLabel7.setText("Cari");
 
@@ -181,6 +178,7 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         });
 
         CariButton.setText("Cari");
+        CariButton.setPreferredSize(new java.awt.Dimension(111, 27));
         CariButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CariButtonActionPerformed(evt);
@@ -200,6 +198,66 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable2);
 
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        TxtImportButton.setText("Import File TXT");
+        TxtImportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtImportButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(TxtImportButton, gridBagConstraints);
+
+        TxtExportButton.setText("Eksport File TXT");
+        TxtExportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtExportButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(TxtExportButton, gridBagConstraints);
+
+        KeluarButton.setText("Keluar");
+        KeluarButton.setMaximumSize(new java.awt.Dimension(111, 27));
+        KeluarButton.setMinimumSize(new java.awt.Dimension(111, 27));
+        KeluarButton.setPreferredSize(new java.awt.Dimension(111, 27));
+        KeluarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                KeluarButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(KeluarButton, gridBagConstraints);
+
+        ImportExcelButton.setText("Import File Excel");
+        ImportExcelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportExcelButtonActionPerformed(evt);
+            }
+        });
+        jPanel4.add(ImportExcelButton, new java.awt.GridBagConstraints());
+
+        EksportExcelButton.setText("Ekspor File Excel");
+        EksportExcelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EksportExcelButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        jPanel4.add(EksportExcelButton, gridBagConstraints);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -209,70 +267,75 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(87, 87, 87)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(NamaBarangTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(KdBarangTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Tanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jumlahTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(KategoriComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(87, 87, 87)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(NamaBarangTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(KdBarangTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Tanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jumlahTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(KategoriComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(132, 132, 132)
+                        .addGap(68, 68, 68)
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addComponent(CariTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(CariButton)))
-                .addGap(71, 71, 71)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(CariTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(CariButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(176, 176, 176)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(336, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addGap(36, 36, 36)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(KdBarangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(KdBarangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(NamaBarangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(Tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jumlahTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(KategoriComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(17, 17, 17)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(CariTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CariButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(NamaBarangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jumlahTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(KategoriComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(CariTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CariButton))
-                .addGap(117, 117, 117))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -317,7 +380,7 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
     private void SimpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SimpanButtonActionPerformed
         // Menyimpan data ke database
         try {
-            String sql = "insert into data_barang (Kode_barang,Nama,Tanggal,Jumlah,Kategoti) values('"
+            String sql = "insert into data_barang (Kode_barang,Nama,Tanggal,Jumlah,Kategori) values('"
                     +KdBarangTextField.getText()+"','"
                     +NamaBarangTextField.getText()+"','"
                     +tgl_masuk+"','"
@@ -364,11 +427,27 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         // Tombol ubah
         try {
             java.sql.Connection conn = (java.sql.Connection) uts.ConfigDatabase.koneksiDB();
-            String sql = "UPDATE data_barang SET nama=?, Tanggal=?, Jumlah=?,  Kategoti=? WHERE Kode_barang=?";
+            String sql = "UPDATE data_barang SET nama=?, Tanggal=?, Jumlah=?,  Kategori=? WHERE Kode_barang=?";
+             if (KdBarangTextField.getText().isEmpty() || NamaBarangTextField.getText().isEmpty() || jumlahTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Harap lengkapi semua data!");
+                return;
+            }
+            
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             
+            pst.setString(1, NamaBarangTextField.getText()); // Nama barang
+            pst.setString(2, tgl_masuk); // Tanggal
+            pst.setString(3, jumlahTextField.getText()); // Jumlah barang
+            pst.setString(4, KategoriComboBox.getSelectedItem().toString()); // Kategori
+            pst.setString(5, KdBarangTextField.getText()); // Kode barang (untuk WHERE)
+            
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Diperbarui");
+            data_tampil();
+ 
             //mengatur nilai
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Data gagal diperbarui"+e.getMessage());
         }
     }//GEN-LAST:event_UbahButtonActionPerformed
 
@@ -403,6 +482,72 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowActivated
 
+    private void TxtExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtExportButtonActionPerformed
+        try {
+                java.sql.Connection conn = (java.sql.Connection) uts.ConfigDatabase.koneksiDB();
+                String sql = "SELECT * FROM data_barang";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                BufferedWriter writer = new BufferedWriter(new FileWriter("data barang.txt"));
+                writer.write("No\tKode Barang\tNama\tTanggal\tJumlah\tKategori\n");
+                while (rs.next()) {
+                        writer.write(
+                            rs.getString(1)+"\t"+
+                            rs.getString(2) + "\t" +
+                            rs.getString(3) + "\t" +
+                            rs.getString(4) + "\t" +
+                            rs.getString(5) + "\t" +
+                            rs.getString(6) + "\n"
+                             );
+                     }
+                writer.close();
+                JOptionPane.showMessageDialog(null, "Data Berhasil diekspor ke data_barang.txt");
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Data gagal diekspor");
+            }
+        
+    }//GEN-LAST:event_TxtExportButtonActionPerformed
+
+    private void TxtImportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtImportButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+               BufferedReader reader = new BufferedReader(new FileReader("data barang.txt"));
+               String line;
+               java.sql.Connection conn = (java.sql.Connection) uts.ConfigDatabase.koneksiDB();
+               String sql = "INSERT INTO data_barang (Kode_barang, Nama, Tanggal, Jumlah, Kategori) VALUES (?, ?, ?, ?, ?)";
+
+               java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+               reader.readLine();
+
+               while ((line = reader.readLine()) != null) {
+                   String[] data = line.split("\t");
+                   pst.setString(1, data[1]);
+                   pst.setString(2, data[2]);
+                   pst.setString(3, data[3]);
+                   pst.setString(4, data[4]);
+                   pst.setString(5, data[5]);
+                   pst.executeUpdate();
+               }
+        
+        reader.close();
+        JOptionPane.showMessageDialog(null, "Data berhasil diimpor dari data barang.txt!");
+        data_tampil();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Data gagal diimpor " +e.getMessage());
+        }
+    }//GEN-LAST:event_TxtImportButtonActionPerformed
+
+    private void ImportExcelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportExcelButtonActionPerformed
+        importToExcel();
+        
+        
+    }//GEN-LAST:event_ImportExcelButtonActionPerformed
+
+    private void EksportExcelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EksportExcelButtonActionPerformed
+        exportToExcel();
+    }//GEN-LAST:event_EksportExcelButtonActionPerformed
+
     //method menampilkan data
     public void data_tampil(){
         try {
@@ -431,6 +576,103 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
         }
     }
     
+    private void exportToExcel() {
+    try {
+        // Koneksi ke database
+        java.sql.Connection conn = (java.sql.Connection) uts.ConfigDatabase.koneksiDB();
+        String sql = "SELECT * FROM data_barang";
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        // Membuat workbook dan sheet Excel
+        XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet("Data Barang");
+            
+            // Membuat header
+            XSSFRow header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Kode Barang");
+            header.createCell(1).setCellValue("Nama");
+            header.createCell(2).setCellValue("Tanggal");
+            header.createCell(3).setCellValue("Jumlah");
+            header.createCell(4).setCellValue("Kategori");
+
+            // Mengisi data dari database
+            int rowIndex = 1;
+            while (rs.next()) {
+                XSSFRow row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(rs.getString("Kode_barang"));
+                row.createCell(1).setCellValue(rs.getString("Nama"));
+                row.createCell(2).setCellValue(rs.getString("Tanggal"));
+                row.createCell(3).setCellValue(rs.getString("Jumlah"));
+                row.createCell(4).setCellValue(rs.getString("Kategori"));
+            }
+
+            // Menyimpan ke file
+            try (FileOutputStream fos = new FileOutputStream("data_barang.xlsx")) {
+                workbook.write(fos);
+            }
+
+        // Menampilkan pesan sukses
+        JOptionPane.showMessageDialog(this, "Data berhasil diekspor ke data_barang.xlsx!");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal mengekspor data ke Excel: " + e.getMessage());
+    }
+}
+     private void importToExcel() {
+          try {
+        // Pilih file Excel menggunakan JFileChooser
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Pilih File Excel");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int userSelection = fileChooser.showOpenDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            // Membaca file Excel
+            FileInputStream fis = new FileInputStream(filePath);
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            // Koneksi ke database
+            java.sql.Connection conn = (java.sql.Connection) uts.ConfigDatabase.koneksiDB();
+            String sql = "INSERT INTO data_barang (Kode_barang, Nama, Tanggal, Jumlah, Kategori) VALUES (?, ?, ?, ?, ?)";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+
+            // Membaca data dari Excel mulai dari baris kedua (skip header)
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                XSSFRow row = sheet.getRow(i);
+
+                if (row != null) {
+                    // Ambil data dari kolom Excel
+                    String kodeBarang = row.getCell(0).getStringCellValue();
+                    String nama = row.getCell(1).getStringCellValue();
+                    String tanggal = row.getCell(2).getStringCellValue();
+                    String jumlah = row.getCell(3).getStringCellValue();
+                    String kategori = row.getCell(4).getStringCellValue();
+
+                    // Masukkan data ke dalam database
+                    pst.setString(1, kodeBarang);
+                    pst.setString(2, nama);
+                    pst.setString(3, tanggal);
+                    pst.setString(4, jumlah);
+                    pst.setString(5, kategori);
+                    pst.executeUpdate();
+                }
+            }
+
+            workbook.close();
+            fis.close();
+
+            JOptionPane.showMessageDialog(this, "Data berhasil diimpor dari file Excel!");
+            data_tampil(); // Refresh tabel
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal mengimpor data dari Excel: " + e.getMessage());
+    }
+     }
+
     
     
     /**
@@ -472,15 +714,17 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
     private javax.swing.JButton CariButton;
     private javax.swing.JTextField CariTextField;
     private javax.swing.JButton ClearButton;
-    private javax.swing.JButton ExportButton;
+    private javax.swing.JButton EksportExcelButton;
     private javax.swing.JButton HapusButton;
-    private javax.swing.JButton ImportButton;
+    private javax.swing.JButton ImportExcelButton;
     private javax.swing.JComboBox<String> KategoriComboBox;
     private javax.swing.JTextField KdBarangTextField;
     private javax.swing.JButton KeluarButton;
     private javax.swing.JTextField NamaBarangTextField;
     private javax.swing.JButton SimpanButton;
     private com.toedter.calendar.JDateChooser Tanggal;
+    private javax.swing.JButton TxtExportButton;
+    private javax.swing.JButton TxtImportButton;
     private javax.swing.JButton UbahButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -492,6 +736,7 @@ public class AplikasiIInventarisBarang extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jumlahTextField;
