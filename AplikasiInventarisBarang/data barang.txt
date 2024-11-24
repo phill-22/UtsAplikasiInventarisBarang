@@ -1,6 +1,6 @@
 No	Kode Barang	Nama	Tanggal	Jumlah	Kategori
-36	kd001	laptop	2024-11-02	4	Elektronik
-37	kd002	sapu	2024-11-01	2	Pecah Belah
-38	kd003	buku	2024-11-01	4	Sekali Pakai
-39	kd004	kaca	2024-11-02	4	Pecah Belah
-40	kd005	dempul	2024-11-01	2	Sekali Pakai
+41	kd001	laptop	2024-11-02	2	Elektronik
+42	kd002	sapu	2024-11-01	2	Pecah Belah
+43	kd003	buku	2024-11-01	4	Sekali Pakai
+44	kd004	kaca	2024-11-02	4	Pecah Belah
+45	kd005	dempul	2024-11-01	2	Sekali Pakai
